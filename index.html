@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harmony Lens | 음악 분석기</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <div class="glow-layer"></div>
+    <header class="hero-panel">
+      <div class="hero-copy">
+        <p class="eyebrow">음악 분석 AI</p>
+        <h1>음악의 숨결을 시각으로 느껴보세요</h1>
+        <p>오디오를 업로드하면 곡의 구조, 스펙트럼, 장르 감성, BPM, 음색, 메타데이터를 아름답게 분석해드립니다.</p>
+      </div>
+      <div class="hero-actions">
+        <div class="upload-card" id="drop-zone">
+          <div class="upload-icon">🎧</div>
+          <p class="upload-title">음악 파일을 여기에 놓거나</p>
+          <label class="upload-button" for="audio-file">파일 선택</label>
+          <input id="audio-file" type="file" accept="audio/*" />
+          <p class="upload-hint">MP3, WAV, AAC 등 지원</p>
+        </div>
+        <div class="detail-card">
+          <h2>실시간 인터랙티브 분석</h2>
+          <p>파형, 주파수 스펙트럼, 감성 지표, 음압, 템포를 곡의 흐름에 맞춰 유기적으로 표시합니다.</p>
+        </div>
+      </div>
+    </header>
+
+    <section class="analysis-grid">
+      <article class="panel glass-panel">
+        <h3>곡 정보</h3>
+        <ul class="info-list" id="metadata-list">
+          <li>업로드된 음악을 선택해주세요.</li>
+        </ul>
+      </article>
+
+      <article class="panel glass-panel wide-panel">
+        <div class="panel-header">
+          <h3>Waveform</h3>
+          <span class="badge">시간축</span>
+        </div>
+        <canvas id="waveform-canvas" width="1200" height="260"></canvas>
+      </article>
+
+      <article class="panel glass-panel wide-panel">
+        <div class="panel-header">
+          <h3>Frequency Spectrum</h3>
+          <span class="badge">주파수 분석</span>
+        </div>
+        <canvas id="spectrum-canvas" width="1200" height="260"></canvas>
+      </article>
+
+      <article class="panel glass-panel stats-panel">
+        <h3>곡 특징</h3>
+        <div class="stat-grid">
+          <div class="stat-card">
+            <span class="stat-label">길이</span>
+            <strong id="duration-value">--:--</strong>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">추정 BPM</span>
+            <strong id="tempo-value">--</strong>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">음압</span>
+            <strong id="loudness-value">-- dB</strong>
+          </div>
+          <div class="stat-card">
+            <span class="stat-label">주요 음색</span>
+            <strong id="color-value">--</strong>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel glass-panel mood-panel">
+        <h3>감성 & 장르 힌트</h3>
+        <p id="mood-value">유기적인 사운드 필드를 분석 중입니다. 음악의 텍스처와 에너지를 시각적으로 변환합니다.</p>
+      </article>
+    </section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/music-metadata-browser/dist/music-metadata-browser.umd.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
