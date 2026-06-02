@@ -39,7 +39,8 @@ fileInput.addEventListener('change', () => {
 });
 
 async function handleFile(file) {
-  // Keep upload validation, metadata extraction, and audio decoding in one user-triggered flow.
+  // 사용자가 파일을 넣으면 검증, 메타데이터 추출, 오디오 디코딩, 화면 렌더링을 한 흐름으로 실행한다.
+  // 분석 전 화면 값을 초기화해서 이전 파일 결과가 새 파일 분석 중에 섞여 보이지 않게 한다.
   if (!file.type.startsWith('audio/')) {
     alert('오디오 파일을 업로드해주세요.');
     return;
@@ -115,7 +116,8 @@ function renderMetadata(metadata, audioBuffer, file) {
 }
 
 function renderSummary(audioBuffer, metadata) {
-  // Summary values are derived from the decoded buffer, while tags only add contextual mood text.
+  // 요약 지표는 실제 디코딩된 샘플에서 계산한다.
+  // 메타데이터는 제목/아티스트 같은 문맥 보조 정보로만 쓰고, 라우드니스/BPM/피치는 오디오 신호 기준으로 산출한다.
   const samples = flattenAudio(audioBuffer);
   const loudness = computeLoudness(samples);
   const tempo = estimateTempo(samples, audioBuffer.sampleRate);
@@ -145,7 +147,8 @@ function computeLoudness(samples) {
 }
 
 function estimateTempo(samples, sampleRate) {
-  // Peak intervals from a coarse amplitude envelope provide a fast first-pass BPM estimate.
+  // 50ms 단위 에너지 envelope에서 피크 간격을 찾고 평균 간격을 BPM으로 바꾼다.
+  // 정밀한 beat tracker는 아니지만 짧은 데모 앱에서 빠르게 템포 감을 보여주기 위한 방식이다.
   const segment = makeEnvelope(samples, sampleRate);
   const peakIntervals = findPeakIntervals(segment, sampleRate);
   if (!peakIntervals.length) return null;
@@ -274,7 +277,8 @@ function renderSpectrum(buffer) {
 }
 
 function computeSpectrum(samples, sampleRate) {
-  // Direct DFT is slow but predictable for this small browser demo and avoids extra dependencies.
+  // 여기서는 FFT 라이브러리 없이 직접 DFT를 계산한다.
+  // 큰 파일 전체가 아니라 앞부분 작은 블록만 분석하므로, 의존성을 줄이면서도 스펙트럼 막대를 그릴 수 있다.
   const N = 4096;
   const input = applyHannWindow(samples.slice(0, N));
   const values = new Float32Array(N / 2);
