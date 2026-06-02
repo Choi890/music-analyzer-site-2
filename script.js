@@ -39,6 +39,7 @@ fileInput.addEventListener('change', () => {
 });
 
 async function handleFile(file) {
+  // Keep upload validation, metadata extraction, and audio decoding in one user-triggered flow.
   if (!file.type.startsWith('audio/')) {
     alert('오디오 파일을 업로드해주세요.');
     return;
@@ -114,6 +115,7 @@ function renderMetadata(metadata, audioBuffer, file) {
 }
 
 function renderSummary(audioBuffer, metadata) {
+  // Summary values are derived from the decoded buffer, while tags only add contextual mood text.
   const samples = flattenAudio(audioBuffer);
   const loudness = computeLoudness(samples);
   const tempo = estimateTempo(samples, audioBuffer.sampleRate);
@@ -143,6 +145,7 @@ function computeLoudness(samples) {
 }
 
 function estimateTempo(samples, sampleRate) {
+  // Peak intervals from a coarse amplitude envelope provide a fast first-pass BPM estimate.
   const segment = makeEnvelope(samples, sampleRate);
   const peakIntervals = findPeakIntervals(segment, sampleRate);
   if (!peakIntervals.length) return null;
@@ -271,6 +274,7 @@ function renderSpectrum(buffer) {
 }
 
 function computeSpectrum(samples, sampleRate) {
+  // Direct DFT is slow but predictable for this small browser demo and avoids extra dependencies.
   const N = 4096;
   const input = applyHannWindow(samples.slice(0, N));
   const values = new Float32Array(N / 2);
